@@ -29,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDto deposit(String accountNumber, Long txnAmount) {
         Account account = accountRepo.findById(accountNumber)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(RuntimeException::new);
         boolean accStatus = account.isAccStatus();
 
         if(accStatus) {
