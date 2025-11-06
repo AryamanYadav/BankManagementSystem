@@ -61,7 +61,8 @@ public class SecurityConfig {
                         "/api/transactions/transfer/**",
                         "/api/transactions/accBalance/**"
 
-                ).hasAnyRole("ADMIN", "USER")
+                )
+                .hasAnyRole("ADMIN", "USER")
 
                 // ✅ 2. Public endpoints
                 /*.requestMatchers(
