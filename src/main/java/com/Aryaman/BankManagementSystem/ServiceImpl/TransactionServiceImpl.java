@@ -2,8 +2,6 @@ package com.Aryaman.BankManagementSystem.ServiceImpl;
 
 import com.Aryaman.BankManagementSystem.Entities.Account;
 import com.Aryaman.BankManagementSystem.Entities.Transaction;
-import com.Aryaman.BankManagementSystem.Exceptions.ResourceNotFoundException;
-import com.Aryaman.BankManagementSystem.Payloads.AccountDto;
 import com.Aryaman.BankManagementSystem.Payloads.TransactionDto;
 import com.Aryaman.BankManagementSystem.Repository.AccountRepo;
 import com.Aryaman.BankManagementSystem.Repository.TransactionRepo;
@@ -32,7 +30,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new RuntimeException());
         boolean accStatus = account.isAccStatus();
 
-        if(accStatus==true) {
+        if(accStatus) {
 
             // Update balance
             account.setAccBalance(account.getAccBalance() + txnAmount);
@@ -57,11 +55,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDto withdraw(String accountNumber, Long txnAmount) {
         Account account = accountRepo.findById(accountNumber)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(RuntimeException::new);
 
         boolean accStatus = account.isAccStatus();
 
-        if(accStatus==true)
+        if(accStatus)
         {
 
         if (account.getAccBalance() < txnAmount) {
@@ -96,15 +94,15 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDto transfer(String senderAccId, String receiverAccId, Long txnAmount) {
         Account sender = accountRepo.findById(senderAccId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(RuntimeException::new);
 
         Account receiver = accountRepo.findById(receiverAccId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(RuntimeException::new);
 
         boolean senderAccStatus= sender.isAccStatus();
         boolean receiverAccStatus= receiver.isAccStatus();
 
-        if(senderAccStatus==true && receiverAccStatus==true) {
+        if(senderAccStatus && receiverAccStatus) {
 
             if (sender.getAccBalance() < txnAmount) {
                 Transaction transaction = new Transaction();
@@ -140,11 +138,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDto accountBalanceCheck(String accountNumber) {
         Account account = this.accountRepo.findById(accountNumber)
-                .orElseThrow(()-> new RuntimeException());
+                .orElseThrow(RuntimeException::new);
 
         boolean accStatus = account.isAccStatus();
 
-        if(accStatus==true) {
+        if(accStatus) {
             TransactionDto transactionDto = new TransactionDto();
             transactionDto.setTxnAmount(account.getAccBalance());
             return transactionDto;
