@@ -53,16 +53,22 @@ public class SecurityConfig {
                         "/api/account/changeStatus/**"
                 ).hasRole("ADMIN")
                 .requestMatchers(
-                        "/api/user/update/**",
-                        "/api/account/create/user/**",
-                        "/api/account/update/**",
                         "/api/transactions/withdraw/**",
                         "/api/transactions/deposit/**",
                         "/api/transactions/transfer/**",
                         "/api/transactions/accBalance/**"
-
+                ).hasRole("USER")
+                .requestMatchers(
+                        "/api/user/update/**",
+                        "/api/account/update/**"
                 )
                 .hasAnyRole("ADMIN", "USER")
+                .requestMatchers(
+                        "/api/account/create/user/**",
+                        "/auth/login",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**"
+                ).permitAll()
 
                 // ✅ 2. Public endpoints
                 /*.requestMatchers(
@@ -80,8 +86,8 @@ public class SecurityConfig {
         http.httpBasic(Customizer.withDefaults());
 
 
-       http.formLogin(withDefaults());
-        //http.httpBasic(withDefaults());
+      // http.formLogin(withDefaults());
+        http.httpBasic(withDefaults());
 
         http.csrf(csrf -> csrf.disable());
 
