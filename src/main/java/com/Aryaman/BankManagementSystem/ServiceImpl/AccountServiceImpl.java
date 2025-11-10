@@ -28,19 +28,31 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto createAccount(AccountDto accountDto,Integer userId) {
         User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","UserId",userId));
-        Account account = this.modelMapper.map(accountDto,Account.class);
-        account.setUser(user);
 
-        String accNum;
-        do {
-            accNum = accountNumberGenerator.generateAccountNumber();
-        } while (accountRepo.existsByAccountNumber(accNum));
+       String userRole = user.getRole();
 
-        account.setAccountNumber(accNum);
+       if(userRole.equals("ADMIN"))
+       {
+            throw new RuntimeException("Admins cannot create their own accounts");
+       }
+
+       else {
+           Account account = this.modelMapper.map(accountDto, Account.class);
+           account.setUser(user);
+
+           String accNum;
+           do {
+               accNum = accountNumberGenerator.generateAccountNumber();
+           } while (accountRepo.existsByAccountNumber(accNum));
+
+           account.setAccountNumber(accNum);
 
 
-        Account savedAccount = this.accountRepo.save(account);
-        return this.modelMapper.map(savedAccount,AccountDto.class);
+           Account savedAccount = this.accountRepo.save(account);
+           return this.modelMapper.map(savedAccount, AccountDto.class);
+       }
+
+
     }
 
     @Override
@@ -55,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
             return accountDto1;
         }
         else{
-            return null;
+            throw new RuntimeException("Account Status is Inactive!");
         }
     }
 

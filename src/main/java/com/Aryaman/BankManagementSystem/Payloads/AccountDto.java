@@ -8,7 +8,17 @@ public class AccountDto {
 
     private Long accBalance;
 
+    public boolean isAccStatus() {
+        return accStatus;
+    }
+
+    public void setAccStatus(boolean accStatus) {
+        this.accStatus = accStatus;
+    }
+
     private boolean accStatus;
+
+
 
 
     public String getAccType() {
@@ -27,13 +37,4 @@ public class AccountDto {
         this.accBalance = accBalance;
     }
 
-
-
-    public boolean isAccStatus() {
-        return accStatus;
-    }
-
-    public void setAccStatus(boolean accStatus) {
-        this.accStatus = accStatus;
-    }
 }
